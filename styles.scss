@@ -1,0 +1,10 @@
+:global{
+  .selecting {
+    border: 1px solid #7607a8 !important;
+  }
+
+  .selected{
+    background: lighten(#7607a8, 10%) !important;
+    color: white !important;
+  }
+}
