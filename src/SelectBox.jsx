@@ -28,7 +28,7 @@ export default class SelectBox extends Component {
   getSelectboxRef = c => this.selectbox = c
 
   render () {
-    const { style, className, fixedPosition} = this.props
+    const { style, className, fixedPosition } = this.props
 
     const boxStyle = {
       ...style,
@@ -42,14 +42,14 @@ export default class SelectBox extends Component {
     }
 
     return (
-        <div>
-          {
+      <div>
+        {
             this.state.isBoxSelecting &&
-                <div ref={this.getSelectboxRef}
-                     style={boxStyle}
-                     className={className} />
+            <div ref={this.getSelectboxRef}
+              style={boxStyle}
+              className={className} />
           }
-        </div>
+      </div>
     )
   }
 }

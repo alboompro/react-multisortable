@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
 import { getBoundsForNode, provideDisplayName } from '../utils'
 
-export default function sortableElement(WrappedComponent) {
+export default function sortableElement (WrappedComponent) {
   return class extends Component {
     state = {
       selected: false,
@@ -13,23 +13,23 @@ export default function sortableElement(WrappedComponent) {
     static displayName = provideDisplayName('SortableElement', WrappedComponent);
 
     static contextTypes = {
-      selectable: React.PropTypes.object,
+      selectable: React.PropTypes.object
     }
 
     static propTypes = {
-      selected: PropTypes.bool,
+      selected: PropTypes.bool
     }
 
     static defaultProps = {
-      selected: false,
+      selected: false
     }
 
-    componentDidMount() {
+    componentDidMount () {
       this.node = ReactDOM.findDOMNode(this) // eslint-disable-line
       this.registerSelectable()
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
       this.context.selectable.unregister(this)
     }
 
@@ -39,15 +39,14 @@ export default function sortableElement(WrappedComponent) {
     }
 
     render () {
-
       const props = {
-          ...this.props,
+        ...this.props,
         selected: this.state.selected,
         selecting: this.state.selecting
       }
 
       return (
-          <WrappedComponent { ...props } />
+        <WrappedComponent {...props} />
       )
     }
   }

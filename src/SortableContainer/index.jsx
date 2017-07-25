@@ -12,7 +12,7 @@ import {
 
 const noop = () => {}
 
-export default function sortableContainer(WrappedComponent) {
+export default function sortableContainer (WrappedComponent) {
   return class extends Component {
     static displayName = provideDisplayName('SortableContainer', WrappedComponent);
 
@@ -57,7 +57,7 @@ export default function sortableContainer(WrappedComponent) {
        * is relying on fixed positioned elements, for instance.
        * @type boolean
        */
-      fixedPosition: PropTypes.bool,
+      fixedPosition: PropTypes.bool
     }
 
     static defaultProps = {
@@ -70,14 +70,14 @@ export default function sortableContainer(WrappedComponent) {
       duringSelection: noop,
       onSelectionFinish: noop,
       onSelectionClear: noop,
-      allowClickWithoutSelected: true,
+      allowClickWithoutSelected: true
     }
 
     static childContextTypes = {
-      selectable: PropTypes.object,
+      selectable: PropTypes.object
     }
 
-    constructor(props) {
+    constructor (props) {
       super(props)
       this.state = { selectionMode: false }
 
@@ -92,7 +92,7 @@ export default function sortableContainer(WrappedComponent) {
       this.ignoreCheckCache = new Map()
       this.ignoreList = this.props.ignoreList.concat([
         '.selectable-select-all',
-        '.selectable-deselect-all',
+        '.selectable-deselect-all'
       ])
     }
 
@@ -103,12 +103,12 @@ export default function sortableContainer(WrappedComponent) {
           unregister: this.unregisterSelectable,
           selectAll: this.selectAll,
           clearSelection: this.clearSelection,
-          getScrolledContainer: () => this.scrollContainer,
-        },
+          getScrolledContainer: () => this.scrollContainer
+        }
       }
     }
 
-    componentDidMount() {
+    componentDidMount () {
       this.resizeInProgress = false
       this.rootNode = this.selectableGroup
       this.scrollContainer = document.querySelector(this.props.scrollContainer) || this.rootNode
@@ -120,7 +120,7 @@ export default function sortableContainer(WrappedComponent) {
       this.isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
       this.rootNode.removeEventListener('mousedown', this.mouseDown)
       this.rootNode.removeEventListener('touchstart', this.mouseDown)
       document.removeEventListener('keydown', this.keyListener)
@@ -128,7 +128,7 @@ export default function sortableContainer(WrappedComponent) {
       this.removeTempEventListeners()
     }
 
-    removeTempEventListeners() {
+    removeTempEventListeners () {
       document.removeEventListener('mousemove', this.openSelectbox)
       document.removeEventListener('touchmove', this.openSelectbox)
       document.removeEventListener('mouseup', this.mouseUp)
@@ -137,7 +137,7 @@ export default function sortableContainer(WrappedComponent) {
 
     applyScale = (top, left) => ({
       scaledTop: top / this.props.scale,
-      scaledLeft: left / this.props.scale,
+      scaledLeft: left / this.props.scale
     })
 
     setScollTop = e => {
@@ -166,7 +166,7 @@ export default function sortableContainer(WrappedComponent) {
       }
     }
 
-    updateRootBounds() {
+    updateRootBounds () {
       if (this.scrollBounds) {
         this.oldScrollBounds = this.scrollBounds
       }
@@ -177,7 +177,7 @@ export default function sortableContainer(WrappedComponent) {
     updateRegistry = () => {
       const containerScroll = {
         scrollTop: this.scrollContainer.scrollTop,
-        scrollLeft: this.scrollContainer.scrollLeft,
+        scrollLeft: this.scrollContainer.scrollLeft
       }
 
       for (const selectableItem of this.registry.values()) {
@@ -196,7 +196,7 @@ export default function sortableContainer(WrappedComponent) {
       this.registry.delete(selectableItem)
     }
 
-    toggleSelectionMode() {
+    toggleSelectionMode () {
       const { selectedItems, state: { selectionMode } } = this
 
       if (selectedItems.size && !selectionMode) {
@@ -224,12 +224,12 @@ export default function sortableContainer(WrappedComponent) {
 
       const top = this.applyContainerScroll(
           scaledTop - this.scrollBounds.top,
-          scrollTop - windowTopScroll,
+          scrollTop - windowTopScroll
       )
 
       let boxTop = this.applyContainerScroll(
           this.mouseDownData.boxTop - this.scrollBounds.top,
-          this.mouseDownData.scrollTop - windowTopScroll,
+          this.mouseDownData.scrollTop - windowTopScroll
       )
 
       const boxHeight = boxTop - top
@@ -241,7 +241,7 @@ export default function sortableContainer(WrappedComponent) {
       const boxLeft = this.applyContainerScroll(
           Math.min(
               leftContainerRelative - (bowWidth / this.props.scale),
-              leftContainerRelative / this.props.scale,
+              leftContainerRelative / this.props.scale
           ),
           -windowLeftScroll
       )
@@ -253,7 +253,7 @@ export default function sortableContainer(WrappedComponent) {
         boxWidth: Math.abs(bowWidth),
         boxHeight: Math.abs(boxHeight),
         boxLeft,
-        boxTop,
+        boxTop
       }, () => {
         this.mouseMoveStarted = false
       })
@@ -281,12 +281,12 @@ export default function sortableContainer(WrappedComponent) {
             selectboxBounds,
             click,
             enableDeselect,
-            mixedDeselect,
+            mixedDeselect
         )
       }
     }
 
-    processItem(item, tolerance, selectboxBounds, click, enableDeselect, mixedDeselect) {
+    processItem (item, tolerance, selectboxBounds, click, enableDeselect, mixedDeselect) {
       if (this.inIgnoreList(item.node)) {
         return null
       }
@@ -319,7 +319,6 @@ export default function sortableContainer(WrappedComponent) {
 
         const canSelect = mixedDeselect ? !item.deselected : !this.deselectionStarted
         if (!selecting && !selected && canSelect) {
-
           item.setState({ selecting: true })
           this.selectionStarted = true
           return this.selectingItems.add(item)
@@ -358,7 +357,7 @@ export default function sortableContainer(WrappedComponent) {
       this.props.onSelectionFinish([...this.selectedItems])
     }
 
-    inIgnoreList(target) {
+    inIgnoreList (target) {
       if (this.ignoreCheckCache.get(target) !== undefined) {
         return this.ignoreCheckCache.get(target)
       }
@@ -370,7 +369,7 @@ export default function sortableContainer(WrappedComponent) {
       return shouldBeIgnored
     }
 
-    updateWhiteListNodes() {
+    updateWhiteListNodes () {
       this.ignoreListNodes = [...document.querySelectorAll(this.ignoreList.join(', '))]
     }
 
@@ -405,18 +404,18 @@ export default function sortableContainer(WrappedComponent) {
       if (!this.props.globalMouse && !isNodeInRoot(e.target, node)) {
         const offsetData = getBoundsForNode(node)
         const collides = doObjectsCollide(
-            {
-              top: offsetData.top,
-              left: offsetData.left,
-              bottom: offsetData.offsetHeight,
-              right: offsetData.offsetWidth,
-            },
-            {
-              top: e.pageY,
-              left: e.pageX,
-              offsetWidth: 0,
-              offsetHeight: 0,
-            }
+          {
+            top: offsetData.top,
+            left: offsetData.left,
+            bottom: offsetData.offsetHeight,
+            right: offsetData.offsetWidth
+          },
+          {
+            top: e.pageY,
+            left: e.pageX,
+            offsetWidth: 0,
+            offsetHeight: 0
+          }
         )
         if (!collides) return
       }
@@ -430,11 +429,10 @@ export default function sortableContainer(WrappedComponent) {
         boxTop: scaledTop,
         scrollTop: this.scrollContainer.scrollTop,
         scrollLeft: this.scrollContainer.scrollLeft,
-        target: e.target,
+        target: e.target
       }
 
       e.preventDefault()
-
 
       document.addEventListener('mousemove', this.openSelectbox)
       document.addEventListener('touchmove', this.openSelectbox)
@@ -442,7 +440,7 @@ export default function sortableContainer(WrappedComponent) {
       document.addEventListener('touchend', this.mouseUp)
     }
 
-    preventEvent(target, type) {
+    preventEvent (target, type) {
       const preventHandler = e => {
         target.removeEventListener(type, preventHandler, true)
         e.preventDefault()
@@ -482,7 +480,7 @@ export default function sortableContainer(WrappedComponent) {
         this.selectbox.setState({
           isBoxSelecting: false,
           boxWidth: 0,
-          boxHeight: 0,
+          boxHeight: 0
         })
         this.props.onSelectionFinish([...this.selectedItems])
       }
@@ -491,7 +489,7 @@ export default function sortableContainer(WrappedComponent) {
       this.cleanUp()
     }
 
-    handleClick(e, top, left) {
+    handleClick (e, top, left) {
       const isMouseUpOnClickElement =
           [...(e.target.classList || [])].indexOf(this.props.clickClassName) > -1
 
@@ -526,7 +524,7 @@ export default function sortableContainer(WrappedComponent) {
       }
     }
 
-    cleanUp() {
+    cleanUp () {
       this.deselectionStarted = false
       this.selectionStarted = false
       if (this.props.mixedDeselect) {
@@ -540,7 +538,7 @@ export default function sortableContainer(WrappedComponent) {
      * Used to return event object with desktop (non-touch) format of event
      * coordinates, regardless of whether the action is from mobile or desktop.
      */
-    desktopEventCoords(e) {
+    desktopEventCoords (e) {
       if (e.pageX === undefined || e.pageY === undefined) { // Touch-device
         if (
             e.targetTouches[0] !== undefined &&
@@ -566,20 +564,20 @@ export default function sortableContainer(WrappedComponent) {
 
     getSelectboxRef = c => this.selectbox = c
 
-    render() {
+    render () {
       const containerClasses = cx({
         [this.props.className]: !!this.props.className,
         [this.props.selectionModeClass]: this.state.selectionMode
       })
 
       return (
-          <div ref={this.getGroupRef} style={this.props.style} className={containerClasses}>
-            <SelectBox
-                ref={this.getSelectboxRef}
-                fixedPosition={this.props.fixedPosition}
+        <div ref={this.getGroupRef} style={this.props.style} className={containerClasses}>
+          <SelectBox
+            ref={this.getSelectboxRef}
+            fixedPosition={this.props.fixedPosition}
             />
-            <WrappedComponent {...this.props} />
-          </div>
+          <WrappedComponent {...this.props} />
+        </div>
       )
     }
   }

@@ -1,5 +1,5 @@
 export const isNodeInRoot = (node, root) => {
-  while(node){
+  while (node) {
     if (node === root) {
       return true
     }
@@ -33,7 +33,7 @@ export const getBoundsForNode = (node, containerScroll = { scrollTop: 0, scrollL
     top: rect.top + document.body.scrollTop + scrollTop,
     left: rect.left + document.body.scrollLeft + scrollLeft,
     offsetWidth: node.offsetWidth,
-    offsetHeight: node.offsetHeight,
+    offsetHeight: node.offsetHeight
   }
 }
 

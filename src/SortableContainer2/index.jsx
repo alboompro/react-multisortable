@@ -10,7 +10,7 @@ import {
   provideDisplayName
 } from '../utils'
 
-export default function SortableContainer(WrappedComponent) {
+export default function SortableContainer (WrappedComponent) {
   return class extends Component {
     state = {
       selectionMode: false,
@@ -41,7 +41,7 @@ export default function SortableContainer(WrappedComponent) {
      * os itens dentro dela como não selecionados
      */
     clearSelection = () => {
-      for(const item of this.state.selectedItems){
+      for (const item of this.state.selectedItems) {
         item.setState({ selected: false })
       }
       this.setState({ selectedItems: [], selectionMode: false })
@@ -59,7 +59,7 @@ export default function SortableContainer(WrappedComponent) {
       this.rootNode.removeEventListener('touchstart', this.mouseDown)
     }
 
-    constructor (props){
+    constructor (props) {
       super(props)
       this.selectedItems = []
       this.selectingItems = []
@@ -127,21 +127,21 @@ export default function SortableContainer(WrappedComponent) {
       // }
 
       const node = this.selectableGroup
-      if(!this.props.globalMouse && !isNodeInRoot(e.target, node)) {
+      if (!this.props.globalMouse && !isNodeInRoot(e.target, node)) {
         const offsetData = getBoundsForNode(node)
         const collides = doObjectsCollide(
-            {
-              top: offsetData.top,
-              left: offsetData.left,
-              bottom: offsetData.offsetHeight,
-              right: offsetData.offsetWidth
-            },
-            {
-              top: e.pageY,
-              left: e.pageX,
-              offsetWidth: 0,
-              offsetHeight: 0
-            }
+          {
+            top: offsetData.top,
+            left: offsetData.left,
+            bottom: offsetData.offsetHeight,
+            right: offsetData.offsetWidth
+          },
+          {
+            top: e.pageY,
+            left: e.pageX,
+            offsetWidth: 0,
+            offsetHeight: 0
+          }
         )
         if (!collides) return
       }
@@ -167,9 +167,9 @@ export default function SortableContainer(WrappedComponent) {
     updateRegistry = () => {
       const containerScroll = {
         scrollTop: this.scrollContainer.scrollTop,
-        scrollLeft: this.scrollContainer.scrollLeft,
+        scrollLeft: this.scrollContainer.scrollLeft
       }
-      for(const selectableItem of this.registry){
+      for (const selectableItem of this.registry) {
         selectableItem.registerSelectable(containerScroll)
       }
     }
@@ -191,11 +191,11 @@ export default function SortableContainer(WrappedComponent) {
      */
     unregisterSelectable = selectableItem => {
       let index = this.registry.indexOf(selectableItem)
-      if (index > -1 ) return
+      if (index > -1) return
       this.registry.splice(index, 1)
     }
 
-    updateRootBounds() {
+    updateRootBounds () {
       if (this.scrollBounds) {
         this.oldScrollBounds = this.scrollBounds
       }
@@ -216,10 +216,10 @@ export default function SortableContainer(WrappedComponent) {
       })
 
       return (
-          <div ref={this.getGroupRef} style={style} className={containerClasses}>
-            <SelectBox ref={this.getSelectboxRef} />
-            <WrappedComponent {...this.props} />
-          </div>
+        <div ref={this.getGroupRef} style={style} className={containerClasses}>
+          <SelectBox ref={this.getSelectboxRef} />
+          <WrappedComponent {...this.props} />
+        </div>
       )
     }
   }
